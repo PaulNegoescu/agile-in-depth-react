@@ -1,17 +1,20 @@
 import { useReducer } from 'react';
+import clsx from 'clsx';
 
-export function Counter() {
+import styles from './Counter.module.css';
+
+export default function Counter({ step = 1 }) {
   const [count, dispatch] = useReducer(counterReducer, 0);
 
   function counterReducer(oldState, action) {
     let newState;
     switch (action.type) {
       case 'INC': {
-        newState = oldState + 1;
+        newState = oldState + action.payload.delta;
         break;
       }
       case 'DEC': {
-        newState = oldState - 1;
+        newState = oldState - action.payload.delta;
         break;
       }
       default: {
@@ -21,12 +24,30 @@ export function Counter() {
     return newState;
   }
 
+  function handleButtonClick(type) {
+    dispatch({ type, payload: { delta: step } });
+  }
+
+  // let cName = '';
+  // if (count > 0) {
+  //   cName = styles.positive;
+  // } else if (count < 0) {
+  //   cName = styles.negative;
+  // }
+
   return (
     <>
-      <output>{count}</output>
+      <output
+        className={clsx({
+          [styles.positive]: count > 0,
+          [styles.negative]: count < 0,
+        })}
+      >
+        {count}
+      </output>
       <div>
-        <button onClick={() => dispatch({ type: 'DEC' })}>-</button>
-        <button onClick={() => dispatch({ type: 'INC' })}>+</button>
+        <button onClick={() => handleButtonClick('DEC')}>-</button>
+        <button onClick={() => handleButtonClick('INC')}>+</button>
       </div>
     </>
   );

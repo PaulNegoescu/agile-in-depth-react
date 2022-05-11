@@ -1,0 +1,11 @@
+{
+  "users": [],
+  "todos": [
+    {
+      "id": 1,
+      "title": "Buy Milk",
+      "completed": false,
+      "userId": 1
+    }
+  ]
+}
