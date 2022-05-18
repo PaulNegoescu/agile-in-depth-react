@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from './Auth.context';
 
 export function Register() {
   const [values, setValues] = useState({
@@ -9,6 +11,9 @@ export function Register() {
     lName: '',
   });
 
+  const { login } = useAuthContext();
+  const navigate = useNavigate();
+
   function handleInputChange(e) {
     const val = e.target.value;
     setValues({
@@ -17,9 +22,20 @@ export function Register() {
     });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(values);
+    const { password_check, ...payload } = values;
+    const data = await fetch('http://localhost:3500/signup', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }).then((res) => res.json());
+
+    // const { token, user } = data;
+    login(data);
+    navigate('/');
   }
 
   return (

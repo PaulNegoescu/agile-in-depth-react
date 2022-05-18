@@ -1,5 +1,20 @@
 {
-  "users": [],
+  "users": [
+    {
+      "email": "p@p.com",
+      "password": "$2a$10$s5zJB3NqRHKoMKjp5xjzReVNDut4wVazYpzJRfoOpXUgfzhUMz6y.",
+      "fName": "Paul",
+      "lName": "Negoescu",
+      "id": 1
+    },
+    {
+      "email": "a@a.com",
+      "password": "$2a$10$9TsvTq9Smdccl.Dvm2KOYe8.gVAsLT9L0laZb9V.txCjAAjlQGEJi",
+      "fName": "Paul",
+      "lName": "Negoescu",
+      "id": 2
+    }
+  ],
   "todos": [
     {
       "id": 1,
