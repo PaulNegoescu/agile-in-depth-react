@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { useFormInput } from '../../hooks/useFormInput';
 import { useAuthContext } from './Auth.context';
@@ -35,8 +35,11 @@ export function Login() {
   const [serverError, setServerError] = useState('');
   const { login, user } = useAuthContext();
 
+  const location = useLocation();
+
   if (user) {
-    return <Navigate to="/" />;
+    const destination = location.state.from ?? '/';
+    return <Navigate to={destination} />;
   }
 
   async function handleSubmit(e) {
@@ -63,7 +66,7 @@ export function Login() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} noValidate>
       {serverError && <ErrorMessage>{serverError}</ErrorMessage>}
       <div>
         <label

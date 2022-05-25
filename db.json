@@ -13,6 +13,13 @@
       "fName": "Paul",
       "lName": "Negoescu",
       "id": 2
+    },
+    {
+      "email": "paul@paul.com",
+      "password": "$2a$10$iZRRS3a6EbCbd3g3ouA2Mu1RKALD2dcJVG6lYY2QBKzz9q4r3CRbq",
+      "fName": "PAUL",
+      "lName": "NEGOESCU",
+      "id": 3
     }
   ],
   "todos": [

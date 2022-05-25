@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Nav, NotFound } from './components';
 import { Login, Register } from './features/Auth';
 import { AuthContextProvider } from './features/Auth/Auth.context';
+import { RouteGuard } from './features/Auth/RouteGuard';
 import { Parent } from './features/Communication/Parent';
 
 const Counter = lazy(() => import('./features/Counter/Counter'));
@@ -27,9 +28,11 @@ export function App() {
             <Route
               path="/counter"
               element={
-                <Suspense fallback={<>Loading ...</>}>
-                  <Counter />
-                </Suspense>
+                <RouteGuard>
+                  <Suspense fallback={<>Loading ...</>}>
+                    <Counter />
+                  </Suspense>
+                </RouteGuard>
               }
             />
             <Route path="/auth/login" element={<Login />} />
