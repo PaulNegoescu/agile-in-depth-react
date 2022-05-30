@@ -11,7 +11,7 @@ export function RouteGuard({ children, adminOnly = false }) {
     if (!user || (adminOnly && user.isAdmin !== true)) {
       navigate('/auth/login', { state: { from: location.pathname } });
     }
-  }, [user, location, navigate]);
+  }, [user, location, navigate, adminOnly]);
 
-  return <>{user && children};</>;
+  return <>{user && children}</>;
 }

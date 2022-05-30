@@ -38,7 +38,7 @@ export function Login() {
   const location = useLocation();
 
   if (user) {
-    const destination = location.state.from ?? '/';
+    const destination = location.state?.from ?? '/';
     return <Navigate to={destination} />;
   }
 

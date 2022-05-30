@@ -1,8 +1,9 @@
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from './Auth.context';
 import { object, ref, string } from 'yup';
+import { FormButton, Input } from '../../components';
 
 const registerValidationSchema = object({
   email: string()
@@ -30,11 +31,7 @@ const registerValidationSchema = object({
 }).required();
 
 export function Register() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const methods = useForm({
     resolver: yupResolver(registerValidationSchema),
   });
 
@@ -57,113 +54,20 @@ export function Register() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label
-          className="w-4/12 text-right inline-block mr-2 mt-2"
-          htmlFor="email"
-        >
-          Email
-        </label>
-        <input
-          className="border border-slate-600"
-          type="email"
-          id="email"
-          {...register('email')}
-        />
-      </div>
-      {errors.email && (
-        <>
-          <span className="w-4/12 inline-block mr-2"></span>
-          <span className="text-red-800">{errors.email.message}</span>
-        </>
-      )}
-      <div>
-        <label
-          className="w-4/12 text-right inline-block mr-2 mt-2"
-          htmlFor="password"
-        >
-          Password
-        </label>
-        <input
-          className="border border-slate-600"
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <Input name="email" type="email" labelText="Email" />
+        <Input name="password" type="password" labelText="Password" />
+        <Input
+          name="password_check"
           type="password"
-          id="password"
-          {...register('password')}
+          labelText="Retype Password"
         />
-      </div>
-      {errors.password && (
-        <>
-          <span className="w-4/12 inline-block mr-2"></span>
-          <span className="text-red-800">{errors.password.message}</span>
-        </>
-      )}
-      <div>
-        <label
-          className="w-4/12 text-right inline-block mr-2 mt-2"
-          htmlFor="password_check"
-        >
-          Retype Password
-        </label>
-        <input
-          className="border border-slate-600"
-          type="password"
-          id="password_check"
-          {...register('password_check')}
-        />
-      </div>
-      {errors.password_check && (
-        <>
-          <span className="w-4/12 inline-block mr-2"></span>
-          <span className="text-red-800">{errors.password_check.message}</span>
-        </>
-      )}
-      <div>
-        <label
-          className="w-4/12 text-right inline-block mr-2 mt-2"
-          htmlFor="fName"
-        >
-          First Name
-        </label>
-        <input
-          className="border border-slate-600"
-          type="text"
-          id="fName"
-          {...register('fName')}
-        />
-      </div>
-      {errors.fName && (
-        <>
-          <span className="w-4/12 inline-block mr-2"></span>
-          <span className="text-red-800">{errors.fName.message}</span>
-        </>
-      )}
-      <div>
-        <label
-          className="w-4/12 text-right inline-block mr-2 mt-2"
-          htmlFor="lName"
-        >
-          Last Name
-        </label>
-        <input
-          className="border border-slate-600"
-          type="text"
-          id="lName"
-          {...register('lName')}
-        />
-      </div>
-      {errors.lName && (
-        <>
-          <span className="w-4/12 inline-block mr-2"></span>
-          <span className="text-red-800">{errors.lName.message}</span>
-        </>
-      )}
-      <div>
-        <span className="w-4/12 inline-block mr-2"></span>
-        <button className="rounded bg-purple-800 text-white px-4 py-2 mt-2">
-          Sign Up
-        </button>
-      </div>
-    </form>
+        <Input name="fName" type="text" labelText="First Name" />
+        <Input name="lName" type="text" labelText="Last Name" />
+
+        <FormButton className="bg-purple-800">Register</FormButton>
+      </form>
+    </FormProvider>
   );
 }

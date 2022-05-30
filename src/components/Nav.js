@@ -35,6 +35,16 @@ export function Nav() {
             className={({ isActive }) =>
               `inline-block hover:underline p-2 ${isActive && 'text-cyan-200'}`
             }
+            to="/todos"
+          >
+            Todos
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              `inline-block hover:underline p-2 ${isActive && 'text-cyan-200'}`
+            }
             to="/counter"
           >
             Counter

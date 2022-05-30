@@ -8,6 +8,7 @@ import { Parent } from './features/Communication/Parent';
 
 const Counter = lazy(() => import('./features/Counter/Counter'));
 const StarWars = lazy(() => import('./features/StarWars/StarWars'));
+const TodoList = lazy(() => import('./features/Todos/TodoList'));
 
 export function App() {
   return (
@@ -31,6 +32,16 @@ export function App() {
                 <RouteGuard>
                   <Suspense fallback={<>Loading ...</>}>
                     <Counter />
+                  </Suspense>
+                </RouteGuard>
+              }
+            />
+            <Route
+              path="/todos"
+              element={
+                <RouteGuard>
+                  <Suspense fallback={<>Loading ...</>}>
+                    <TodoList />
                   </Suspense>
                 </RouteGuard>
               }

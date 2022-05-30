@@ -1,6 +1,6 @@
 import { Child1 } from './Child1';
 import { Child2 } from './Child2';
-import { CommsContextProvider, useCommsContext } from './CommsContext';
+import { CommsContextProvider } from './CommsContext';
 
 export function Parent() {
   return (

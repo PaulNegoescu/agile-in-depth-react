@@ -20,14 +20,58 @@
       "fName": "PAUL",
       "lName": "NEGOESCU",
       "id": 3
+    },
+    {
+      "email": "b@b.com",
+      "password": "$2a$10$76jdB/jbb7CO8ku8.FCeJelIrtUwowznq6hnXdd4c0EnWvejY4gIC",
+      "fName": "Paul",
+      "lName": "Negoescu",
+      "id": 4
+    },
+    {
+      "email": "c@c.com",
+      "password": "$2a$10$uPv8RcLiuINDj/3S/QlwG.ArNzj6C30T/tKp1qPmOQnHYD/Z1Lvt2",
+      "fName": "Claudiu",
+      "lName": "Popescu",
+      "id": 5
     }
   ],
   "todos": [
     {
       "id": 1,
       "title": "Buy Milk",
-      "completed": false,
+      "completed": true,
       "userId": 1
+    },
+    {
+      "title": "Go swimming",
+      "userId": 1,
+      "completed": true,
+      "id": 2
+    },
+    {
+      "title": "Refactor the app",
+      "userId": 1,
+      "completed": false,
+      "id": 3
+    },
+    {
+      "title": "Fix all the bugs again",
+      "userId": 1,
+      "completed": true,
+      "id": 5
+    },
+    {
+      "title": "Something",
+      "userId": 1,
+      "completed": false,
+      "id": 6
+    },
+    {
+      "title": "Adaugam",
+      "userId": 1,
+      "completed": true,
+      "id": 7
     }
   ]
 }
