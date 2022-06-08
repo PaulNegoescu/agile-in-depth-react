@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
-import { FormProvider, set, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 import { H1 } from '../../components/styled-components';
 import { useAuthContext } from '../Auth/Auth.context';
@@ -9,11 +9,11 @@ import {
   FormButton,
   Input,
   Modal,
-  ModalContent,
   ModalFooter,
   ModalHeader,
   useShowable,
 } from '../../components';
+import { useApi } from '../../hooks/useApi';
 
 const todoValidationSchema = object({
   title: string().required('Please provide a todo item.'),
@@ -22,8 +22,9 @@ const todoValidationSchema = object({
 export default function TodoList() {
   const [todos, setTodos] = useState(null);
   const modalProps = useShowable();
+  const { create, getAll, update, remove } = useApi('/todos');
 
-  const { user, token, logout } = useAuthContext();
+  const { user } = useAuthContext();
   const methods = useForm({
     resolver: yupResolver(todoValidationSchema),
   });
@@ -33,9 +34,7 @@ export default function TodoList() {
       return;
     }
 
-    const data = await fetch(
-      `http://localhost:3500/todos?userId=${userId}`
-    ).then((res) => res.json());
+    const data = await getAll(`userId=${userId}`);
     setTodos(data);
   }
 
@@ -50,74 +49,28 @@ export default function TodoList() {
       completed: false,
     };
 
-    const todo = await fetch('http://localhost:3500/todos', {
-      method: 'POST',
-      body: JSON.stringify(newTodo),
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => res.json());
+    const todo = await create(newTodo);
 
     setTodos((old) => [...old, todo]);
   }
 
   async function handleStatusChange(todoId, completed) {
-    await fetch(`http://localhost:3500/todos/${todoId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ completed }),
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await update(todoId, { completed });
 
     getTodos(user.id);
   }
 
   async function handleDeleteItem(todoId) {
-    try {
-      await fetch(`http://localhost:3500/todos/${todoId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res) => {
-        if (!res.ok) {
-          if (res.status === 401) {
-            logout();
-            throw new Error('Session token expired.');
-          }
-        }
+    await remove(todoId);
 
-        return res.json();
-      });
-
-      // setTodos(todos.filter((todo) => todo.id !== todoId));
-      getTodos(user.id);
-    } catch (e) {
-      return null;
-    }
+    getTodos(user.id);
   }
 
   async function handleDeleteAll() {
-    modalProps.open();
-    // if (
-    //   !window.confirm('Are you sure you want to delete all completed todos?')
-    // ) {
-    //   return;
-    // }
-    return;
+    modalProps.close();
     const promises = todos
       .filter((todo) => todo.completed)
-      .map((todo) =>
-        fetch(`http://localhost:3500/todos/${todo.id}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-      );
+      .map((todo) => remove(todo.id));
 
     await Promise.allSettled(promises);
 
@@ -153,7 +106,7 @@ export default function TodoList() {
       </ul>
       <button
         className="bg-red-800 text-red-100 rounded px-2"
-        onClick={handleDeleteAll}
+        onClick={modalProps.open}
       >
         Delete all completed
       </button>
@@ -165,17 +118,11 @@ export default function TodoList() {
         }}
       >
         <ModalHeader>
-          <h2>Title of the modal</h2>
+          <H1>Do you really want to delete all completed items?</H1>
         </ModalHeader>
-        <ModalContent>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse natus,
-          eum perferendis quo voluptates numquam sequi modi. Perspiciatis,
-          consequatur voluptates velit quisquam veniam distinctio eos fugit illo
-          cumque? Itaque, est. Paul
-        </ModalContent>
         <ModalFooter>
           <button onClick={modalProps.close}>Cancel</button>
-          <button>Save</button>
+          <button onClick={handleDeleteAll}>Save</button>
         </ModalFooter>
       </Modal>
     </>

@@ -38,10 +38,10 @@
   ],
   "todos": [
     {
-      "title": "Refactor the app",
+      "title": "asd",
       "userId": 1,
-      "completed": true,
-      "id": 3
+      "completed": false,
+      "id": 1
     }
   ]
 }
