@@ -31,7 +31,7 @@ export function useFormInput(fields, validation) {
     for (const rule of validation[field]) {
       const isValid = rule.isValid(value);
       newErrors[field] = isValid ? '' : rule.message;
-      console.log(newErrors);
+
       if (!isValid) {
         allPassed = false;
       }

@@ -38,40 +38,10 @@
   ],
   "todos": [
     {
-      "id": 1,
-      "title": "Buy Milk",
-      "completed": true,
-      "userId": 1
-    },
-    {
-      "title": "Go swimming",
-      "userId": 1,
-      "completed": true,
-      "id": 2
-    },
-    {
       "title": "Refactor the app",
       "userId": 1,
-      "completed": false,
+      "completed": true,
       "id": 3
-    },
-    {
-      "title": "Fix all the bugs again",
-      "userId": 1,
-      "completed": true,
-      "id": 5
-    },
-    {
-      "title": "Something",
-      "userId": 1,
-      "completed": false,
-      "id": 6
-    },
-    {
-      "title": "Adaugam",
-      "userId": 1,
-      "completed": true,
-      "id": 7
     }
   ]
 }

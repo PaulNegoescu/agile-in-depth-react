@@ -1,11 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, set, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 import { H1 } from '../../components/styled-components';
 import { useAuthContext } from '../Auth/Auth.context';
 import { TodoItem } from './TodoItem';
-import { FormButton, Input } from '../../components';
+import {
+  FormButton,
+  Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useShowable,
+} from '../../components';
 
 const todoValidationSchema = object({
   title: string().required('Please provide a todo item.'),
@@ -13,24 +21,26 @@ const todoValidationSchema = object({
 
 export default function TodoList() {
   const [todos, setTodos] = useState(null);
-  const { user, token } = useAuthContext();
+  const modalProps = useShowable();
+
+  const { user, token, logout } = useAuthContext();
   const methods = useForm({
     resolver: yupResolver(todoValidationSchema),
   });
 
-  useEffect(() => {
-    async function getTodos() {
-      if (!user.id) {
-        return;
-      }
-
-      const data = await fetch(
-        `http://localhost:3500/todos?userId=${user.id}`
-      ).then((res) => res.json());
-      setTodos(data);
+  async function getTodos(userId) {
+    if (!userId) {
+      return;
     }
 
-    getTodos();
+    const data = await fetch(
+      `http://localhost:3500/todos?userId=${userId}`
+    ).then((res) => res.json());
+    setTodos(data);
+  }
+
+  useEffect(() => {
+    getTodos(user.id);
   }, [user.id]);
 
   async function onSubmit({ title }) {
@@ -52,8 +62,8 @@ export default function TodoList() {
     setTodos((old) => [...old, todo]);
   }
 
-  function handleStatusChange(todoId, completed) {
-    fetch(`http://localhost:3500/todos/${todoId}`, {
+  async function handleStatusChange(todoId, completed) {
+    await fetch(`http://localhost:3500/todos/${todoId}`, {
       method: 'PATCH',
       body: JSON.stringify({ completed }),
       headers: {
@@ -61,6 +71,57 @@ export default function TodoList() {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    getTodos(user.id);
+  }
+
+  async function handleDeleteItem(todoId) {
+    try {
+      await fetch(`http://localhost:3500/todos/${todoId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => {
+        if (!res.ok) {
+          if (res.status === 401) {
+            logout();
+            throw new Error('Session token expired.');
+          }
+        }
+
+        return res.json();
+      });
+
+      // setTodos(todos.filter((todo) => todo.id !== todoId));
+      getTodos(user.id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function handleDeleteAll() {
+    modalProps.open();
+    // if (
+    //   !window.confirm('Are you sure you want to delete all completed todos?')
+    // ) {
+    //   return;
+    // }
+    return;
+    const promises = todos
+      .filter((todo) => todo.completed)
+      .map((todo) =>
+        fetch(`http://localhost:3500/todos/${todo.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
+
+    await Promise.allSettled(promises);
+
+    getTodos(user.id);
   }
 
   return (
@@ -86,9 +147,37 @@ export default function TodoList() {
               key={todo.id}
               item={todo}
               onStatusChange={handleStatusChange}
+              onDeleteItem={handleDeleteItem}
             />
           ))}
       </ul>
+      <button
+        className="bg-red-800 text-red-100 rounded px-2"
+        onClick={handleDeleteAll}
+      >
+        Delete all completed
+      </button>
+      <Modal
+        {...modalProps}
+        close={() => {
+          console.log('acum se inchide');
+          modalProps.close();
+        }}
+      >
+        <ModalHeader>
+          <h2>Title of the modal</h2>
+        </ModalHeader>
+        <ModalContent>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse natus,
+          eum perferendis quo voluptates numquam sequi modi. Perspiciatis,
+          consequatur voluptates velit quisquam veniam distinctio eos fugit illo
+          cumque? Itaque, est. Paul
+        </ModalContent>
+        <ModalFooter>
+          <button onClick={modalProps.close}>Cancel</button>
+          <button>Save</button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 }

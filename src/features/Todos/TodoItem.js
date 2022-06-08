@@ -1,4 +1,6 @@
-export function TodoItem({ item, onStatusChange }) {
+import { IoTrashOutline } from 'react-icons/io5';
+
+export function TodoItem({ item, onStatusChange, onDeleteItem }) {
   return (
     <li>
       <input
@@ -10,6 +12,9 @@ export function TodoItem({ item, onStatusChange }) {
       />
       <label htmlFor={`todo${item.id}`} className="peer-checked:line-through">
         {item.title}
+        <button onClick={() => onDeleteItem(item.id)}>
+          <IoTrashOutline />
+        </button>
       </label>
     </li>
   );
