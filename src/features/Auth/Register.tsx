@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from './Auth.context';
 import { object, ref, string } from 'yup';
-import { FormButton, Input } from '../../components';
+import { PrimaryButton, Input } from 'components/form';
 
 type FormData = {
   email: string;
@@ -74,7 +74,7 @@ export function Register() {
         <Input name="fName" type="text" labelText="First Name" />
         <Input name="lName" type="text" labelText="Last Name" />
 
-        <FormButton className="bg-purple-800">Register</FormButton>
+        <PrimaryButton>Register</PrimaryButton>
       </form>
     </FormProvider>
   );

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Navigate, useLocation } from 'react-router-dom';
-import { IAuthData, useAuthContext } from './Auth.context';
-import { Input, FormButton } from 'components';
-import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { object, string } from 'yup';
+import { IAuthData, useAuthContext } from './Auth.context';
+import { Input, PrimaryButton } from 'components/form';
+import { Link } from 'components/styled-components';
 
 type FormData = {
   email: string;
@@ -56,7 +57,10 @@ export function Login() {
       <form onSubmit={methods.handleSubmit(handleSubmit)} noValidate>
         <Input name="email" type="email" labelText="Email" />
         <Input name="password" type="password" labelText="Password" />
-        <FormButton className="bg-purple-800">Sign In</FormButton>
+        <div className="text-right mb-6">
+          Already got an account? <Link to="register">Register here</Link>
+        </div>
+        <PrimaryButton>Sign In</PrimaryButton>
       </form>
     </FormProvider>
   );

@@ -25,23 +25,19 @@ export function Input({
   } = useFormContext();
 
   return (
-    <>
-      <div className="grid grid-cols-12 gap-2 mt-4">
-        <label className="col-span-5 text-right" htmlFor={name}>
-          {labelText}
-        </label>
-        <input
-          className="col-start-6 col-end-13 border border-slate-600 px-1"
-          type={type}
-          id={name}
-          {...register(name)}
-        />
-        {errors[name] && (
-          <span className="col-start-6 col-end-13 text-red-800">
-            {errors[name].message}
-          </span>
-        )}
-      </div>
-    </>
+    <div className="flex flex-col gap-1 text-left mb-6">
+      <label className="text-sm" htmlFor={name}>
+        {labelText}
+      </label>
+      <input
+        className="text-sm rounded border border-steel-gray px-2 py-3 focus:bg-quiz-purple focus:text-white"
+        type={type}
+        id={name}
+        {...register(name)}
+      />
+      {errors[name] && (
+        <span className="text-red-800">{errors[name].message}</span>
+      )}
+    </div>
   );
 }
